@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nadja's 40. Geburtstag - TODO Liste</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --light-gray: #f1f3f5;
+            --dark-gray: #495057;
+            --text-color: #212529;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--dark-gray);
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .progress-bar {
+            height: 24px;
+            width: 0%;
+            background-color: var(--success-color);
+            border-radius: 8px;
+            text-align: center;
+            line-height: 24px;
+            color: white;
+            font-weight: bold;
+            transition: width 0.4s ease;
+        }
+        .category {
+            margin-top: 30px;
+            border-top: 1px solid #dee2e6;
+            padding-top: 20px;
+        }
+        .category h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: var(--secondary-color);
+            margin-bottom: 8px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+        li:hover {
+            background-color: #e9ecef;
+        }
+        li.completed {
+            opacity: 0.6;
+        }
+        li.completed .task-text {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        .task-text {
+            flex-grow: 1;
+            margin: 0 12px;
+        }
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            accent-color: var(--success-color);
+        }
+        .delete-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 18px;
+            line-height: 28px;
+            text-align: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        li:hover .delete-btn {
+            opacity: 1;
+        }
+        .add-todo {
+            display: flex;
+            margin-top: 25px;
+        }
+        .add-todo input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px 0 0 8px;
+            font-size: 1em;
+        }
+        .add-todo button {
+            padding: 12px 20px;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            border-radius: 0 8px 8px 0;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Nadja's 40. Geburtstag - TODO Liste</h1>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="add-todo">
+            <input type="text" id="new-todo" placeholder="Neue Aufgabe hinzufügen...">
+            <button onclick="addTodo()">Hinzufügen</button>
+        </div>
+        <div id="todo-list"></div>
+    </div>
+
+    <script>
+        const markdownContent = `
+# 🎉 Nadja's 40. Geburtstag - Party TODO Liste
+
+## 📅 **Datum: 01. August 2025, ab 15:00 Uhr**
+## 💰 **Budget: 500€**
+
+---
+
+## 🔧 **TECHNISCHE VORBEREITUNG** (Priorität: HOCH)
+
+### ✅ Einladung fertigstellen
+- [x] Web-Einladung erstellen
+- [x] Mobile Optimierung
+- [x] Power Automate Integration
+- [ ] **Power Automate Flow einrichten**
+  - [ ] Flow in Power Automate erstellen
+  - [ ] JSON Schema aus \`power-automate-schema.json\` kopieren
+  - [ ] E-Mail-Benachrichtigungen konfigurieren
+  - [ ] Flow testen
+- [ ] **Einladung online stellen**
+  - [ ] GitHub Repository erstellen
+  - [ ] Dateien hochladen
+  - [ ] GitHub Pages aktivieren
+  - [ ] URL testen
+
+### 📱 Einladung verschicken
+- [ ] **Gästeliste erstellen** (~15 Personen)
+- [ ] **Einladungstext für WhatsApp/E-Mail vorbereiten**
+- [ ] **Link verschicken** (spätestens 3 Wochen vorher)
+- [ ] **Erinnerung senden** (1 Woche vorher)
+
+---
+
+## 🏠 **LOCATION & SETUP** (Priorität: HOCH)
+
+### 🏡 Zuhause vorbereiten
+- [ ] **Haus/Wohnung aufräumen und putzen**
+- [ ] **Dekoration besorgen und aufhängen**
+  - [ ] Sommerliche Deko (Girlanden, Ballons)
+  - [ ] "40" Zahlen-Ballons
+  - [ ] Lichterketten für Atmosphäre
+- [ ] **Sitzgelegenheiten organisieren**
+  - [ ] Stühle von Nachbarn/Familie leihen
+  - [ ] Gartenmöbel aufstellen (falls Garten vorhanden)
+- [ ] **Musik-Setup vorbereiten**
+  - [ ] Playlist mit Nadjas Lieblingsliedern erstellen
+  - [ ] Lautsprecher/Musikanlage testen
+
+---
+
+## 🍽️ **ESSEN & TRINKEN** (Budget: ~300€)
+
+### 🥘 Essen planen
+- [ ] **Menü festlegen** (basierend auf finaler Gästezahl)
+  - [ ] Fingerfood/Buffet-Stil für ~15 Personen
+  - [ ] Vegetarische/vegane Optionen berücksichtigen
+- [ ] **Einkaufsliste erstellen**
+- [ ] **Großeinkauf** (2-3 Tage vorher)
+- [ ] **Essen vorbereiten** (1 Tag vorher)
+  - [ ] Salate, Dips, kalte Speisen
+  - [ ] Warme Speisen am Partytag
+
+### 🥤 Getränke
+- [ ] **Getränke-Auswahl**
+  - [ ] Alkoholische Getränke (Wein, Bier, Sekt)
+  - [ ] Alkoholfreie Alternativen
+  - [ ] Wasser, Säfte
+- [ ] **Eis besorgen** (am Partytag)
+
+### 🎂 Geburtstagstorte
+- [ ] **Torte bestellen oder backen**
+- [ ] **40 Kerzen besorgen**
+- [ ] **Tortenheber und Teller bereitstellen**
+
+---
+
+## 🎁 **GESCHENKE & ÜBERRASCHUNGEN** (Budget: ~100€)
+
+### 🎁 Hauptgeschenk
+- [ ] **Geschenk für Nadja besorgen**
+- [ ] **Geschenk schön verpacken**
+- [ ] **Versteck für Geschenk finden**
+
+### 📸 Erinnerungen
+- [ ] **Fotowand/Collage vorbereiten**
+  - [ ] Alte Fotos von Nadja sammeln
+  - [ ] Schöne Präsentation basteln
+- [ ] **Gästebuch organisieren**
+- [ ] **Kamera/Handy für Fotos bereithalten**
+
+---
+
+## ⏰ **ZEITPLANUNG - PARTYTAG (01.08.2025)**
+
+### 🌅 Vormittag (9:00 - 12:00)
+- [ ] **Letzte Einkäufe** (Eis, frische Sachen)
+- [ ] **Dekoration aufhängen**
+- [ ] **Essen vorbereiten**
+
+### 🕐 Mittag (12:00 - 14:30)
+- [ ] **Haus final herrichten**
+- [ ] **Musik testen**
+- [ ] **Getränke kalt stellen**
+- [ ] **Nadja "wegschicken"** (Spaziergang, Besorgungen, etc.)
+
+### 🎉 Party-Start (14:30 - 15:00)
+- [ ] **Gäste empfangen**
+- [ ] **Alle verstecken/positionieren**
+- [ ] **Nadja zurückholen**
+- [ ] **"ÜBERRASCHUNG!" rufen** 🎊
+
+---
+
+## 📋 **GÄSTE-MANAGEMENT**
+
+### 📊 RSVP Tracking
+- [ ] **Admin-Dashboard regelmäßig checken** (\`admin.html\`)
+- [ ] **Finale Gästezahl bestätigen** (25. Juli)
+- [ ] **Absagen nachfassen** (höflich nachfragen)
+- [ ] **Essen entsprechend anpassen**
+
+---
+
+## 🛒 **EINKAUFSLISTE** (wird noch detailliert)
+
+### 🎨 Dekoration (~50€)
+- [ ] Ballons (normale + Zahlen "40")
+- [ ] Girlanden
+- [ ] Lichterketten
+- [ ] Tischdecken
+- [ ] Servietten, Teller, Becher
+
+### 🍽️ Essen (~300€)
+- [ ] **Wird nach finaler Gästezahl erstellt**
+
+### 🥤 Getränke (~100€)
+- [ ] **Wird nach finaler Gästezahl erstellt**
+
+### 🎁 Sonstiges (~50€)
+- [ ] Geschenkpapier
+- [ ] Kerzen für Torte
+- [ ] Gästebuch
+- [ ] Einwegkameras (optional)
+
+---
+
+## 🚨 **NOTFALL-PLAN**
+
+### 🌧️ Schlechtes Wetter
+- [ ] **Plan B für Indoor-Party**
+- [ ] **Zusätzliche Sitzgelegenheiten drinnen**
+`;
+
+        const TODO_STORAGE_KEY = 'todos_nadja_bday';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const todoListContainer = document.getElementById('todo-list');
+            let todos = getTodos();
+
+            if (!todos || todos.length === 0) {
+                todos = parseMarkdown(markdownContent);
+                saveTodos(todos);
+            }
+
+            render(todos, todoListContainer);
+            
+            const newTodoInput = document.getElementById('new-todo');
+            newTodoInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    addTodo();
+                }
+            });
+        });
+
+        function getTodos() {
+            const todosJson = localStorage.getItem(TODO_STORAGE_KEY);
+            return todosJson ? JSON.parse(todosJson) : [];
+        }
+
+        function saveTodos(todos) {
+            localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify(todos));
+        }
+
+        function parseMarkdown(markdown) {
+            const lines = markdown.split('\n');
+            const todos = [];
+            let categoryStack = [];
+
+            lines.forEach(line => {
+                const trimmedLine = line.trim();
+                if (trimmedLine.startsWith('#')) {
+                    const level = trimmedLine.match(/^#+/)[0].length;
+                    const title = trimmedLine.substring(level).trim();
+                    if (level >= 2 && level <= 4) {
+                        categoryStack = categoryStack.slice(0, level - 2);
+                        categoryStack.push(title);
+                    }
+                } else if (trimmedLine.startsWith('- [')) {
+                    const indent = line.indexOf('-');
+                    const taskMatch = trimmedLine.match(/-\s\[(x| )\]\s(.+)/);
+                    if (taskMatch) {
+                        const completed = taskMatch[1] === 'x';
+                        let text = taskMatch[2].trim();
+                        if (indent > 0) {
+                            text = ' '.repeat(indent) + text;
+                        }
+                        const category = categoryStack.length > 0 ? categoryStack.join(' > ') : 'Allgemein';
+                        todos.push({ text, completed, category });
+                    }
+                }
+            });
+            return todos;
+        }
+
+        function render(todos, container) {
+            container.innerHTML = '';
+            const categories = [...new Set(todos.map(todo => todo.category))];
+
+            categories.forEach(category => {
+                if (category) {
+                    const categoryContainer = document.createElement('div');
+                    categoryContainer.className = 'category';
+                    
+                    const categoryTitle = document.createElement('h2');
+                    categoryTitle.textContent = category.replace(/\\*\\*/g, ''); // Clean markdown from title
+                    categoryContainer.appendChild(categoryTitle);
+
+                    const list = document.createElement('ul');
+                    todos.forEach((todo, index) => {
+                        if (todo.category === category) {
+                            const listItem = document.createElement('li');
+                            listItem.className = todo.completed ? 'completed' : '';
+
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.checked = todo.completed;
+                            checkbox.onchange = () => toggleTodo(index);
+                            
+                            const taskText = document.createElement('span');
+                            taskText.className = 'task-text';
+                            taskText.innerHTML = todo.text.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>').replace(/`(.*?)`/g, '<code>$1</code>');
+
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.className = 'delete-btn';
+                            deleteBtn.textContent = '×';
+                            deleteBtn.onclick = () => deleteTodo(index);
+
+                            listItem.appendChild(checkbox);
+                            listItem.appendChild(taskText);
+                            listItem.appendChild(deleteBtn);
+                            list.appendChild(listItem);
+                        }
+                    });
+                    categoryContainer.appendChild(list);
+                    container.appendChild(categoryContainer);
+                }
+            });
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const todos = getTodos();
+            const completedCount = todos.filter(todo => todo.completed).length;
+            const totalCount = todos.length;
+            const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+
+        function toggleTodo(index) {
+            let todos = getTodos();
+            todos[index].completed = !todos[index].completed;
+            saveTodos(todos);
+            render(todos, document.getElementById('todo-list'));
+        }
+
+        function deleteTodo(index) {
+            let todos = getTodos();
+            todos.splice(index, 1);
+            saveTodos(todos);
+            render(todos, document.getElementById('todo-list'));
+        }
+
+        function addTodo() {
+            const newTodoInput = document.getElementById('new-todo');
+            const text = newTodoInput.value.trim();
+            if (text) {
+                let todos = getTodos();
+                todos.push({ text, completed: false, category: 'Allgemein' });
+                saveTodos(todos);
+                render(todos, document.getElementById('todo-list'));
+                newTodoInput.value = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
